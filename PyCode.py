@@ -201,6 +201,7 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, x_val):
 
 # Setting Up Values (for root finding)
 inputBefVal = 0
+
 inputVal = 0.7
 inputRound = 50
 errRound = 5
