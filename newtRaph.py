@@ -6,7 +6,7 @@ x = symbols('x')
 def evToX(f, val):
     return N(f.subs(x, val))
 
-def NewtonRaphson(f, f_dif, val, roundV, errRound, limit=1000, it=0):
+def NewtonRaphson(f, f_dif, val, roundV, errRound, limit=1000, it=0, error=0):
 
     # Newton Raphson Formula + Error Evaluation
     value = val - evToX(f, val) / evToX(f_dif, val)
@@ -28,7 +28,7 @@ def NewtonRaphson(f, f_dif, val, roundV, errRound, limit=1000, it=0):
 
     return NewtonRaphson(f, f_dif, value, roundV, errRound, limit, iter, error)
   
-inputVal = 0.7
+inputVal = 1
 inputRound = 50
 errRound = 5
 inputTolerance = 1e-50
@@ -36,4 +36,4 @@ func = x**10-1
 func_dif = diff(x**10-1, x)
 
 # Calling Methods
-newtRaph = NewtonRaphson(f=(func), f_dif=(func_dif), val=(inputVal), roundV=(inputRound), errRound=(errRound), tolerance=(inputTolerance))
+newtRaph = NewtonRaphson(f=(func), f_dif=(func_dif), val=(inputVal), roundV=(inputRound), errRound=(errRound))

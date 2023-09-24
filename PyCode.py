@@ -210,27 +210,26 @@ func = x**10-1
 func_dif = diff(x**10-1, x)
 
 # Calling Methods
-newtRaph = NewtonRaphson(f=(func), f_dif=(func_dif), val=(inputVal), roundV=(inputRound), errRound=(errRound), tolerance=(inputTolerance))
-print("\n")
-secnMthd = SecantMethod(valCurr=(inputVal), valBef=(inputBefVal), roundV=(inputRound), errRound=(errRound), tolerance=(inputTolerance), f=(func), limit=(1000))
+# newtRaph = NewtonRaphson(f=(func), f_dif=(func_dif), val=(inputVal), roundV=(inputRound), errRound=(errRound), tolerance=(inputTolerance))
+# print("\n")
+# secnMthd = SecantMethod(valCurr=(inputVal), valBef=(inputBefVal), roundV=(inputRound), errRound=(errRound), tolerance=(inputTolerance), f=(func), limit=(1000))
 
 # Setting Up Values (for root formulation finding)
 b = [7.85, -19.3, 71.4]
 guess = [0, 0, 0]
 matr = [
-    [3, -0.1, -0.2],
+    [3, 10, 0.2],
     [0.1, 7, -0.3],
     [0.3, -0.2, 10]
 ]
 
 # Calling Methods
-gaussSeid = GaussSeidel(roundV=(4), errTol=(0.000000001), totalTerm=(3),
-            b_val=(b), x_val=(guess), matrix=(matr))
+gaussSeid = GaussSeidel(roundV=(4), errTol=(0.000000001), totalTerm=(3), b_val=(b), x_val=(guess), matrix=(matr))
 
 # Making Up Conclusions:
 print()
 print("[Evaluation finished with the result]")
-print(f"Newton Raphson resulted in {newtRaph[0]} with {newtRaph[1]} iterations.")
-print(f"Secant Method  resulted in {secnMthd[0]} with {secnMthd[1]} iterations.")
+# print(f"Newton Raphson resulted in {newtRaph[0]} with {newtRaph[1]} iterations.")
+# print(f"Secant Method  resulted in {secnMthd[0]} with {secnMthd[1]} iterations.")
 print(f"Gauss  Seidel  resulted in the vector of:\n{gaussSeid[0]}\nin {gaussSeid[1]} iterations.")
 print("[Evaluation completed]")
