@@ -3,7 +3,7 @@ def PowerRegressor(x_val=[], y_val=[], power=1):
     # Exception Handler
     if len(x_val) != len(y_val):
         print("Invalid input! Cannot regress different size of x_val and y_val!")
-        return
+        exit()
 
     # Evaluate Matrix
     # Take the n

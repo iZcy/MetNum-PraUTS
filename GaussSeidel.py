@@ -20,6 +20,8 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, vi
     errX = []
     x_valProcess = []
 
+    print(b_val, "\n", matrix)
+
     # Guess-Handler
     if (guess == 0):  # If it is not set, set all to zero
         for i in range(len(b_val)):
@@ -78,8 +80,12 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, vi
             print()
 
         for i in range(len(errX)):
-            errX[i] = abs((x_valProcess[i] - prev_x_valProcess[i]) /
-                          x_valProcess[i])*100
+            errX[i] = 0
+            try:
+              errX[i] = abs((x_valProcess[i] - prev_x_valProcess[i]) /
+                            x_valProcess[i])*100
+            except:
+              errX[i] = 0
 
             # Terminate if the minimum error achieved
             if (abs(errX[i]) < errTol):

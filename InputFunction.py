@@ -1,3 +1,9 @@
-from sympy import sympify
+from sympy import *
 
-funct = sympify("x**2 - 1")
+funct = "2*x"
+
+try:
+  funct = sympify(funct)
+except:
+  print("Invalid Function Input!")
+  exit()

@@ -20,7 +20,7 @@ options_type = [
 
 options_input = [
     "Pleace choose your input:",
-    "From 'InputX' and 'InputY' File",
+    "From Input file",
     "From manual input"
 ]
 
@@ -30,6 +30,11 @@ def optionHandler(options=[], taken=[], chosen=""):  # Reduce Options
 
     # Check selection validity
     if (chosen != "") and (chosen in options):
+        # Pick Regress = Pick Gauss
+        if (chosen == options_type[3] and options_type[2] in options):
+            selected.append(options_type[2])
+            options.remove(options_type[2])
+
         selected.append(chosen)
         options.remove(chosen)
     else:
@@ -137,7 +142,7 @@ def u_interface_mthd(callback_input):  # Numerical Method Type
     print()
 
     execute(isRootFinding=(isRootFinding), isLinEqSlving=(
-        isLinEqSlving), isEqRegressor=(isEqRegressor))
+        isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput={manualInput})
 
 
 def u_interface_src():  # Data Source
