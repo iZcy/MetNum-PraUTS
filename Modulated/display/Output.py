@@ -11,7 +11,7 @@ from inputFiles.InputGauss import inMatrix, inVector
 from inputFiles.InputX import x_vector
 from inputFiles.InputY import y_vector
 
-def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter, isRootFinding, isLinEqSlving, isEqRegressor, manualInput=False, x_data=[], y_data=[], isOptimization = False):
+def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, realFunction, newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter, isRootFinding, isLinEqSlving, isEqRegressor, manualInput=False, x_data=[], y_data=[], isOptimization = False):
     # Setup Import
     analyzeX = x_vector
     analyzeY = y_vector
@@ -39,12 +39,19 @@ def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIt
         print("Analysis of Root:")
         
         if (isOptimization):
-            print("(Optimization Mode)")
+            print("\n(Optimization Mode)\n")
 
         print(
             f"Newton Raphson resulted in:\n{newtRaphRes}\nwith {newtRaphIter} iterations.")
+
+        if (isOptimization):
+            print("Max/min Value:", evToX(realFunction, newtRaphRes))
+        
         print(
             f"Secant Method  resulted in:\n{secnMthdRes}\nwith {secnMthdIter} iterations.")
+
+        if (isOptimization):
+            print("Max/min Value:", evToX(realFunction, secnMthdRes))
         print("\n[Evaluation completed]")
 
 
@@ -64,6 +71,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
 
     # Function Definition
     fixedFunction = funct
+    realFunction  = funct
 
     while (True and inputManual and isRootFinding and not isLinEqSlving):
         tempFunct = input("Please input your function: ")
@@ -79,6 +87,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
 
         if (passed):
             fixedFunction = tempFunct
+            realFunction  = tempFunct
             break
 
     # Calling GaussSed
@@ -177,9 +186,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
             func, gaussSdRes, gaussSdIter = GauSedProcess(inMatrix, inVector, convertFunc=(convertToFunc))
 
         fixedFunction = func
-
-        if (isOptimization): # Differentiate for optimization
-            fixedFunction = diff(fixedFunction)
+        realFunction  = func
 
         gaussSeidRes = copy.deepcopy(gaussSdRes)
         gaussSeidIter = gaussSdIter
@@ -190,13 +197,24 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
     secnMthdRes = []
     secnMthdIter = 0
 
+    if (isOptimization): # Differentiate for optimization
+        fixedFunction = diff(fixedFunction, x)
+
     if (isRootFinding):
-        newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(
-            fixedFunction)
+        if (list(manualInput)[0]):
+            inputMin = mustNumber("Please input minimum restriction: ", dataType="float")
+            inputMax = mustNumber("Please input maximum restriction: ", dataType="float")
+
+            newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction, intervalMin=(inputMin), intervalMax=(inputMax))
+
+        else:
+            newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction)
+          
         newtRaphRes = copy.deepcopy(newtRhRes)
         newtRaphIter = newtRIter
         secnMthdRes = copy.deepcopy(secnMRes)
         secnMthdIter = secnMIter
 
-    analysis(fixedFunction=(fixedFunction), gaussSeidIter=(gaussSeidIter), gaussSeidRes=(gaussSeidRes), newtRaphIter=(
+    # print("Fix", fixedFunction, "Real", realFunction, sep="\n")
+    analysis(fixedFunction=(fixedFunction), realFunction=(realFunction), gaussSeidIter=(gaussSeidIter), gaussSeidRes=(gaussSeidRes), newtRaphIter=(
         newtRaphIter), newtRaphRes=(newtRaphRes), secnMthdIter=(secnMthdIter), secnMthdRes=(secnMthdRes), isRootFinding=(isRootFinding), isLinEqSlving=(isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput=(inputManual), x_data=(matrixPR), y_data=(vectorPR), isOptimization=(isOptimization))

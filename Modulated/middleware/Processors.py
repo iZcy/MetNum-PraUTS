@@ -52,13 +52,13 @@ def GauSedProcess(matrixPR, vectorPR, convertFunc=True):
     return [fixedFunction, gaussSeidRes, gaussSeidIter]
 
 
-def SrRootProcess(fixedFunction):
+def SrRootProcess(fixedFunction, intervalMin=(intervalMin), intervalMax=(intervalMax)):
     # Calling Methods Root-Finding
     newtRaphRes, newtRaphIter = NewtonRaphson(f=(fixedFunction), f_dif=(diff(fixedFunction, x)), val=(inputVal), roundV=(
-        inputRound), errRound=(errRound), tolerance=(errTolerance), limit=(iterLimit), view=(viewProcess))
+        inputRound), errRound=(errRound), tolerance=(errTolerance), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
     secnMthdRes, secnMthdIter = SecantMethod(valCurr=(inputVal), valBef=(inputBefVal), roundV=(
-        inputRound), errRound=(errRound), tolerance=(errTolerance), f=(fixedFunction), limit=(iterLimit), view=(viewProcess))
+        inputRound), errRound=(errRound), tolerance=(errTolerance), f=(fixedFunction), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
 
     return [newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter]

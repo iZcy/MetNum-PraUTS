@@ -16,6 +16,10 @@ errRound = 10
 errTolerance = 1e-100
 iterLimit = 1000
 
+# Optimization
+intervalMin = 0.5
+intervalMax = 1
+
 # View Toggle
 viewProcess = False
 #
@@ -68,7 +72,7 @@ inVector = [
     7.85, -19.3, 71.4
 ]
 
-funct = "2*x + 1"
+funct = "-2*x**2 + 3*x + 1"
 
 try:
   funct = sympify(funct)
@@ -234,7 +238,7 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, vi
     return [arrOut, iteration]
 
 # NewtonRaphson
-def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True):
+def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('-inf')):
     iter = 0
     errPrev = 0
     currentVal = val
@@ -262,6 +266,16 @@ def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000
         except:
           0
 
+        # Simulation Terminator: Interval exceeding --- Exceeds the restriction
+        if ((intervalMin != float('-inf') and intervalMax != float('inf')) and (currentValue < intervalMin or currentValue > intervalMax)):
+            print("Stopped by the restricted interval exceeded")
+            if (currentValue < intervalMin):
+                currentValue = intervalMin
+            elif (currentValue > intervalMax):
+                currentValue = intervalMax
+                
+            return [currentValue, iter]
+
         # Simulation Terminator: Found --- 0 Error a.k.a currentValue is found
         if (error == 0):
             print("Stopped by the exact currentValue found")
@@ -280,7 +294,7 @@ def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000
         # Simulation Terminator: Found!
         elif (evToX(f, currentValue) == 0.0):
             print("Solution found!")
-            terminate = true
+            terminate = True
 
         # Continue Update
         currentVal = currentValue
@@ -357,7 +371,9 @@ def PowerRegressor(x_val=[], y_val=[], power=1):
     return [matrix, res_vector]
 
 # Secant Method
-def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=1000, view=True):
+
+
+def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('-inf')):
     iter = 0
     errPrev = 0
 
@@ -388,6 +404,16 @@ def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=
         # Updating Process
         terminate = False
 
+        # Simulation Terminator: Interval exceeding --- Exceeds the restriction
+        if ((intervalMin != float('-inf') and intervalMax != float('inf')) and (valUpd < intervalMin or valUpd > intervalMax)):
+            print("Stopped by the restricted interval exceeded")
+            if (valUpd < intervalMin):
+                valUpd = intervalMin
+            elif (valUpd > intervalMax):
+                valUpd = intervalMax
+                
+            return [valUpd, iter]
+
         # Simulation Terminator: Found --- 0 Error a.k.a value is found
         if (error == 0):
             print("Stopped by the exact value found")
@@ -410,7 +436,7 @@ def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=
         # Simulation Terminator: Found!
         elif (evToX(f, valUpd) == 0.0):
             print("Solution found!")
-            terminate = true
+            terminate = True
 
         # Continue Update
         current2ndVal = currentVal
@@ -424,6 +450,7 @@ def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=
     # Simulation Terminator: Limit of Loop
     print("Iteration Limit! The function is either divergent or requires more iteration!")
     return [round(currentVal, roundV), iter]
+
 #
 #
 #
@@ -524,7 +551,6 @@ def mustNumber(msg, errMsg="Invalid input! Please try again!", dataType="float",
             continue
         except:
             promptError(errMsg, loopMsg)
-            print("this one")
 
     return value
 
@@ -572,16 +598,17 @@ def GauSedProcess(matrixPR, vectorPR, convertFunc=True):
     return [fixedFunction, gaussSeidRes, gaussSeidIter]
 
 
-def SrRootProcess(fixedFunction):
+def SrRootProcess(fixedFunction, intervalMin=(intervalMin), intervalMax=(intervalMax)):
     # Calling Methods Root-Finding
     newtRaphRes, newtRaphIter = NewtonRaphson(f=(fixedFunction), f_dif=(diff(fixedFunction, x)), val=(inputVal), roundV=(
-        inputRound), errRound=(errRound), tolerance=(errTolerance), limit=(iterLimit), view=(viewProcess))
+        inputRound), errRound=(errRound), tolerance=(errTolerance), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
     secnMthdRes, secnMthdIter = SecantMethod(valCurr=(inputVal), valBef=(inputBefVal), roundV=(
-        inputRound), errRound=(errRound), tolerance=(errTolerance), f=(fixedFunction), limit=(iterLimit), view=(viewProcess))
+        inputRound), errRound=(errRound), tolerance=(errTolerance), f=(fixedFunction), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
 
     return [newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter]
+
 #
 #
 #
@@ -593,7 +620,7 @@ def SrRootProcess(fixedFunction):
 #
 #
 # DISPLAY --- [Output]
-def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter, isRootFinding, isLinEqSlving, isEqRegressor, manualInput=False, x_data=[], y_data=[]):
+def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, realFunction, newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter, isRootFinding, isLinEqSlving, isEqRegressor, manualInput=False, x_data=[], y_data=[], isOptimization = False):
     # Setup Import
     analyzeX = x_vector
     analyzeY = y_vector
@@ -619,14 +646,25 @@ def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIt
 
     if (isRootFinding):
         print("Analysis of Root:")
+        
+        if (isOptimization):
+            print("\n(Optimization Mode)\n")
+
         print(
             f"Newton Raphson resulted in:\n{newtRaphRes}\nwith {newtRaphIter} iterations.")
+
+        if (isOptimization):
+            print("Max/min Value:", evToX(realFunction, newtRaphRes))
+        
         print(
             f"Secant Method  resulted in:\n{secnMthdRes}\nwith {secnMthdIter} iterations.")
+
+        if (isOptimization):
+            print("Max/min Value:", evToX(realFunction, secnMthdRes))
         print("\n[Evaluation completed]")
 
 
-def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
+def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimization = False):
     # print(f"{isRootFinding}, {isLinEqSlving}, {isEqRegressor}, {inputManual}")
     convertToFunc = False
     inputManual = list(manualInput)[0]
@@ -642,6 +680,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
 
     # Function Definition
     fixedFunction = funct
+    realFunction  = funct
 
     while (True and inputManual and isRootFinding and not isLinEqSlving):
         tempFunct = input("Please input your function: ")
@@ -657,6 +696,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
 
         if (passed):
             fixedFunction = tempFunct
+            realFunction  = tempFunct
             break
 
     # Calling GaussSed
@@ -755,6 +795,8 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
             func, gaussSdRes, gaussSdIter = GauSedProcess(inMatrix, inVector, convertFunc=(convertToFunc))
 
         fixedFunction = func
+        realFunction  = func
+
         gaussSeidRes = copy.deepcopy(gaussSdRes)
         gaussSeidIter = gaussSdIter
 
@@ -764,16 +806,27 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
     secnMthdRes = []
     secnMthdIter = 0
 
+    if (isOptimization): # Differentiate for optimization
+        fixedFunction = diff(fixedFunction, x)
+
     if (isRootFinding):
-        newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(
-            fixedFunction)
+        if (list(manualInput)[0]):
+            inputMin = mustNumber("Please input minimum restriction: ", dataType="float")
+            inputMax = mustNumber("Please input maximum restriction: ", dataType="float")
+
+            newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction, intervalMin=(inputMin), intervalMax=(inputMax))
+
+        else:
+            newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction)
+          
         newtRaphRes = copy.deepcopy(newtRhRes)
         newtRaphIter = newtRIter
         secnMthdRes = copy.deepcopy(secnMRes)
         secnMthdIter = secnMIter
 
-    analysis(fixedFunction=(fixedFunction), gaussSeidIter=(gaussSeidIter), gaussSeidRes=(gaussSeidRes), newtRaphIter=(
-        newtRaphIter), newtRaphRes=(newtRaphRes), secnMthdIter=(secnMthdIter), secnMthdRes=(secnMthdRes), isRootFinding=(isRootFinding), isLinEqSlving=(isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput=(inputManual), x_data=(matrixPR), y_data=(vectorPR))
+    # print("Fix", fixedFunction, "Real", realFunction, sep="\n")
+    analysis(fixedFunction=(fixedFunction), realFunction=(realFunction), gaussSeidIter=(gaussSeidIter), gaussSeidRes=(gaussSeidRes), newtRaphIter=(
+        newtRaphIter), newtRaphRes=(newtRaphRes), secnMthdIter=(secnMthdIter), secnMthdRes=(secnMthdRes), isRootFinding=(isRootFinding), isLinEqSlving=(isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput=(inputManual), x_data=(matrixPR), y_data=(vectorPR), isOptimization=(isOptimization))
 
 # DISPLAY --- [Interface]
 # User Interface
@@ -793,9 +846,15 @@ options_type = [
 ]
 
 options_input = [
-    "Pleace choose your input:",
+    "Please choose your input:",
     "From Input file",
     "From manual input"
+]
+
+options_optimization = [
+    "Do you wanna use optimization?",
+    "Yes",
+    "No"
 ]
 
 
@@ -879,6 +938,14 @@ def optionDisplayer(options=[], selected=[], multiChoice=True):  # Display Optio
     return [handledOpts, handledSelect]
 
 
+def u_interface_optim():
+    options, selected = optionDisplayer(options_optimization, multiChoice=(False))
+
+    decode = True if selected[0] == "Yes" else False if selected[0] == "No" else "Error"
+
+    # print(decode)
+    return decode
+
 def u_interface_mthd(callback_input):  # Numerical Method Type
     options, selected = optionDisplayer(options_type)
 
@@ -915,8 +982,12 @@ def u_interface_mthd(callback_input):  # Numerical Method Type
 
     print()
 
+    isOptimiziation = False
+    if (isRootFinding):
+        isOptimiziation = u_interface_optim()
+
     execute(isRootFinding=(isRootFinding), isLinEqSlving=(
-        isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput={manualInput})
+        isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput={manualInput}, isOptimization=(isOptimiziation))
 
 
 def u_interface_src():  # Data Source

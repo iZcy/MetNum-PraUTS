@@ -79,6 +79,5 @@ def mustNumber(msg, errMsg="Invalid input! Please try again!", dataType="float",
             continue
         except:
             promptError(errMsg, loopMsg)
-            print("this one")
 
     return value

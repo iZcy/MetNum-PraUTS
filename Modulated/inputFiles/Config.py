@@ -16,5 +16,9 @@ errRound = 10
 errTolerance = 1e-100
 iterLimit = 1000
 
+# Optimization
+intervalMin = float('-inf')
+intervalMax = float('inf')
+
 # View Toggle
 viewProcess = False

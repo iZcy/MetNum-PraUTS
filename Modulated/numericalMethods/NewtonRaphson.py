@@ -1,7 +1,7 @@
 from middleware.ExtraFunction import *
 
 # NewtonRaphson
-def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True):
+def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('-inf')):
     iter = 0
     errPrev = 0
     currentVal = val
@@ -28,6 +28,16 @@ def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000
           abs(error - errPrev) < tolerance
         except:
           0
+        
+        # Simulation Terminator: Interval exceeding --- Exceeds the restriction
+        if ((intervalMin != float('-inf') and intervalMax != float('inf')) and (currentValue < intervalMin or currentValue > intervalMax)):
+            print("Stopped by the restricted interval exceeded")
+            if (currentValue < intervalMin):
+                currentValue = intervalMin
+            elif (currentValue > intervalMax):
+                currentValue = intervalMax
+                
+            return [currentValue, iter]
 
         # Simulation Terminator: Found --- 0 Error a.k.a currentValue is found
         if (error == 0):
@@ -47,7 +57,7 @@ def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000
         # Simulation Terminator: Found!
         elif (evToX(f, currentValue) == 0.0):
             print("Solution found!")
-            terminate = true
+            terminate = True
 
         # Continue Update
         currentVal = currentValue

@@ -3,7 +3,7 @@ from middleware.ExtraFunction import *
 # Secant Method
 
 
-def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=1000, view=True):
+def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('-inf')):
     iter = 0
     errPrev = 0
 
@@ -34,6 +34,16 @@ def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=
         # Updating Process
         terminate = False
 
+        # Simulation Terminator: Interval exceeding --- Exceeds the restriction
+        if ((intervalMin != float('-inf') and intervalMax != float('inf')) and (valUpd < intervalMin or valUpd > intervalMax)):
+            print("Stopped by the restricted interval exceeded")
+            if (valUpd < intervalMin):
+                valUpd = intervalMin
+            elif (valUpd > intervalMax):
+                valUpd = intervalMax
+                
+            return [valUpd, iter]
+
         # Simulation Terminator: Found --- 0 Error a.k.a value is found
         if (error == 0):
             print("Stopped by the exact value found")
@@ -56,7 +66,7 @@ def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=
         # Simulation Terminator: Found!
         elif (evToX(f, valUpd) == 0.0):
             print("Solution found!")
-            terminate = true
+            terminate = True
 
         # Continue Update
         current2ndVal = currentVal

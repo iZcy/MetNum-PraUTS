@@ -114,8 +114,9 @@ def optionDisplayer(options=[], selected=[], multiChoice=True):  # Display Optio
 def u_interface_optim():
     options, selected = optionDisplayer(options_optimization, multiChoice=(False))
 
-    decode = True if selected == "Yes" else False if selected == "No" else "Error"
+    decode = True if selected[0] == "Yes" else False if selected[0] == "No" else "Error"
 
+    # print(decode)
     return decode
 
 def u_interface_mthd(callback_input):  # Numerical Method Type
@@ -154,10 +155,12 @@ def u_interface_mthd(callback_input):  # Numerical Method Type
 
     print()
 
-    isOptimiziation = u_interface_optim()
+    isOptimiziation = False
+    if (isRootFinding):
+        isOptimiziation = u_interface_optim()
 
     execute(isRootFinding=(isRootFinding), isLinEqSlving=(
-        isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput={manualInput})
+        isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput={manualInput}, isOptimization=(isOptimiziation))
 
 
 def u_interface_src():  # Data Source
