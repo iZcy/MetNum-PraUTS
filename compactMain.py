@@ -1036,8 +1036,11 @@ def u_interface():
     u_interface_wlcm()
     u_interface_mthd(callback_input=(u_interface_src))
 
-# Data Validity
-checkValidity()
+try:
+    # Data Validity
+    checkValidity()
 
-# Execute
-u_interface()
+    # Execute
+    u_interface()
+except:
+    print("\nTerminated by Error")

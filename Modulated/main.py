@@ -2,8 +2,11 @@
 from middleware.DataValidity import checkValidity
 from display.Interface import u_interface
 
-# Data Validity
-checkValidity()
+try:
+    # Data Validity
+    checkValidity()
 
-# Execute
-u_interface()
+    # Execute
+    u_interface()
+except:
+    print("\nTerminated by Error")

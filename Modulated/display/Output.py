@@ -31,6 +31,10 @@ def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, realFunction, newtRaphR
     if (isLinEqSlving or isEqRegressor):
         print(
             f"Gauss  Seidel  resulted in the vector of:\n{gaussSeidRes}\nwith {gaussSeidIter} iterations.\n")
+        
+        if (isOptimization):
+            print(f"Function to be optimized:\n{realFunction}", end="\n\n")
+        
         if (isEqRegressor):
             print(
                 f"Translated into Power Regressor in a function of:\n{fixedFunction}", end="\n\n")
