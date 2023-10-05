@@ -1,7 +1,7 @@
 from middleware.ExtraFunction import *
 
 # NewtonRaphson
-def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('-inf')):
+def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('inf')):
     iter = 0
     errPrev = 0
     currentVal = val

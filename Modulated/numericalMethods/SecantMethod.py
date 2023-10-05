@@ -3,7 +3,7 @@ from middleware.ExtraFunction import *
 # Secant Method
 
 
-def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('-inf')):
+def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('inf')):
     iter = 0
     errPrev = 0
 

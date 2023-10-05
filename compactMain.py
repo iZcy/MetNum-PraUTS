@@ -238,7 +238,7 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, vi
     return [arrOut, iteration]
 
 # NewtonRaphson
-def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('-inf')):
+def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('inf')):
     iter = 0
     errPrev = 0
     currentVal = val
@@ -373,7 +373,7 @@ def PowerRegressor(x_val=[], y_val=[], power=1):
 # Secant Method
 
 
-def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('-inf')):
+def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=1000, view=True, intervalMin=float('-inf'), intervalMax=float('inf')):
     iter = 0
     errPrev = 0
 
