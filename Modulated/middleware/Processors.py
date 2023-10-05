@@ -10,9 +10,8 @@ from inputFiles.InputX import x_vector
 from inputFiles.InputY import y_vector
 
 # Execute Function
-
-
 def PowRegProcess(inputVectX=[], inputVectY=[], power=regressPower):
+    os.system('cls')
     # Calling Methods for Power Regressor
     if (inputVectX != [] and inputVectY != []):
         matrixPR, vectorPR = PowerRegressor(
@@ -27,7 +26,8 @@ def PowRegProcess(inputVectX=[], inputVectY=[], power=regressPower):
     return [matrixPR, vectorPR]
 
 
-def GauSedProcess(matrixPR, vectorPR, convertFunc=True):
+def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inputGuess else 0), errTol=(errTolerance)):
+    os.system('cls')
     # Calling Methods for Linear Algebra Solving
     
     # Default minError = as much as vector elements
@@ -37,8 +37,8 @@ def GauSedProcess(matrixPR, vectorPR, convertFunc=True):
     else:
         minErr = len(vectorPR)
 
-    gaussSeidRes, gaussSeidIter = GaussSeidel(roundV=(inputRound), errTol=(errTolerance), totalTerm=(
-        minErr), b_val=(vectorPR), guess=(inputGuess if inputGuess else 0), matrix=(matrixPR), limit=(iterLimit), view=(viewProcess))
+    gaussSeidRes, gaussSeidIter = GaussSeidel(roundV=(inputRound), errTol=(errTol), totalTerm=(
+        minErr), b_val=(vectorPR), guess=(guess), matrix=(matrixPR), limit=(iterLimit), view=(viewProcess))
 
     if gaussSeidIter == 0:
         return
@@ -52,13 +52,14 @@ def GauSedProcess(matrixPR, vectorPR, convertFunc=True):
     return [fixedFunction, gaussSeidRes, gaussSeidIter]
 
 
-def SrRootProcess(fixedFunction, intervalMin=(intervalMin), intervalMax=(intervalMax)):
+def SrRootProcess(fixedFunction, intervalMin=(intervalMin), intervalMax=(intervalMax), guessOne=(inputVal), guessTwo=(inputBefVal), errTol=(errTolerance)):
+    os.system('cls')
     # Calling Methods Root-Finding
-    newtRaphRes, newtRaphIter = NewtonRaphson(f=(fixedFunction), f_dif=(diff(fixedFunction, x)), val=(inputVal), roundV=(
-        inputRound), errRound=(errRound), tolerance=(errTolerance), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
+    newtRaphRes, newtRaphIter = NewtonRaphson(f=(fixedFunction), f_dif=(diff(fixedFunction, x)), val=(guessOne), roundV=(
+        inputRound), errRound=(errRound), tolerance=(errTol), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
-    secnMthdRes, secnMthdIter = SecantMethod(valCurr=(inputVal), valBef=(inputBefVal), roundV=(
-        inputRound), errRound=(errRound), tolerance=(errTolerance), f=(fixedFunction), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
+    secnMthdRes, secnMthdIter = SecantMethod(valCurr=(guessOne), valBef=(guessTwo), roundV=(
+        inputRound), errRound=(errRound), tolerance=(errTol), f=(fixedFunction), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
 
     return [newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter]

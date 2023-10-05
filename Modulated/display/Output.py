@@ -60,6 +60,12 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
     convertToFunc = False
     inputManual = list(manualInput)[0]
 
+    # Setting Error Tolerance
+    errTol = 0
+    if (inputManual):
+        errTol = mustNumber("Please input error tolerance: ", dataType=("float"))
+    os.system('cls')
+
     # Calling PowerReg
     matrixPR = []
     vectorPR = []
@@ -180,7 +186,19 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
 
         if (inputManual or isEqRegressor):
             checkConfig(len(vectorPR))
-            func, gaussSdRes, gaussSdIter = GauSedProcess(matrixPR, vectorPR, convertFunc=(convertToFunc))
+
+            guess = 0 # Fill the guess
+            if (isLinEqSlving and inputManual):
+                guess = []
+
+                for i in range(len(vectorPR)):
+                    os.system('cls')
+                    print(f"Current guess: {vectorPR}")
+                    tempInput = mustNumber(f"Please input the guess number {i}: ", loopMsg=(
+                        f"Current guess: {vectorPR}"))
+                    guess.append(tempInput)
+
+            func, gaussSdRes, gaussSdIter = GauSedProcess(matrixPR, vectorPR, convertFunc=(convertToFunc), guess=(guess), errTol=(errTol))
         else:
             checkConfig(len(inVector))
             func, gaussSdRes, gaussSdIter = GauSedProcess(inMatrix, inVector, convertFunc=(convertToFunc))
@@ -202,10 +220,13 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
 
     if (isRootFinding):
         if (list(manualInput)[0]):
+            guessOne = mustNumber("Please input 1st guess (for NR and SM): ", dataType="float")
+            guessTwo = mustNumber("Please input 2nd guess (for SM)       : ", dataType="float")
+
             inputMin = mustNumber("Please input minimum restriction: ", dataType="float")
             inputMax = mustNumber("Please input maximum restriction: ", dataType="float")
 
-            newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction, intervalMin=(inputMin), intervalMax=(inputMax))
+            newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction, intervalMin=(inputMin), intervalMax=(inputMax), guessOne=(guessOne), guessTwo=(guessTwo), errTol=(errTol))
 
         else:
             newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction)
