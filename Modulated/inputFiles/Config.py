@@ -1,6 +1,6 @@
 # Setting Up Configurations
 # Method Setting
-regressPower = 2      # Regressor Power + 1 ex. for 1 degree of x, do 2
+regressPower = 4      # Regressor Power + 1 ex. for 1 degree of x, do 2
 gseidMinErrPass = 0   # Default<=0 adjust to the vector size
 # Minimum vector values that pass the error tolerance ex. for val = 2, [0%, 0%, 5%] is considered to as valid to return
 

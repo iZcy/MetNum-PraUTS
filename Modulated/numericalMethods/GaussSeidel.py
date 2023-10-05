@@ -20,7 +20,7 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, vi
     errX = []
     x_valProcess = []
 
-    print(b_val, "\n", matrix)
+    # print(b_val, "\n", matrix)
 
     # Guess-Handler
     if (guess == 0):  # If it is not set, set all to zero

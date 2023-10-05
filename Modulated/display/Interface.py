@@ -19,9 +19,15 @@ options_type = [
 ]
 
 options_input = [
-    "Pleace choose your input:",
+    "Please choose your input:",
     "From Input file",
     "From manual input"
+]
+
+options_optimization = [
+    "Do you wanna use optimization?",
+    "Yes",
+    "No"
 ]
 
 
@@ -31,9 +37,9 @@ def optionHandler(options=[], taken=[], chosen=""):  # Reduce Options
     # Check selection validity
     if (chosen != "") and (chosen in options):
         # Pick Regress = Pick Gauss
-        if (chosen == options_type[3] and options_type[2] in options):
-            selected.append(options_type[2])
-            options.remove(options_type[2])
+        # if (chosen == options_type[3] and options_type[2] in options):
+        #     selected.append(options_type[2])
+        #     options.remove(options_type[2])
 
         selected.append(chosen)
         options.remove(chosen)
@@ -105,6 +111,13 @@ def optionDisplayer(options=[], selected=[], multiChoice=True):  # Display Optio
     return [handledOpts, handledSelect]
 
 
+def u_interface_optim():
+    options, selected = optionDisplayer(options_optimization, multiChoice=(False))
+
+    decode = True if selected == "Yes" else False if selected == "No" else "Error"
+
+    return decode
+
 def u_interface_mthd(callback_input):  # Numerical Method Type
     options, selected = optionDisplayer(options_type)
 
@@ -140,6 +153,8 @@ def u_interface_mthd(callback_input):  # Numerical Method Type
         print("ERROR IN METHOD CHOICE SELECTION")
 
     print()
+
+    isOptimiziation = u_interface_optim()
 
     execute(isRootFinding=(isRootFinding), isLinEqSlving=(
         isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput={manualInput})

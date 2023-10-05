@@ -11,7 +11,7 @@ from inputFiles.InputGauss import inMatrix, inVector
 from inputFiles.InputX import x_vector
 from inputFiles.InputY import y_vector
 
-def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter, isRootFinding, isLinEqSlving, isEqRegressor, manualInput=False, x_data=[], y_data=[]):
+def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter, isRootFinding, isLinEqSlving, isEqRegressor, manualInput=False, x_data=[], y_data=[], isOptimization = False):
     # Setup Import
     analyzeX = x_vector
     analyzeY = y_vector
@@ -23,9 +23,9 @@ def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIt
     # Making Up Conclusions:
     if (isEqRegressor):
         print("[Evaluation finished with the result]\n")
-        print(f"Analyzing the dataset of:\n",
-              f"x = {analyzeX}\n",
-              f"y = {analyzeY}\n")
+        # print(f"Analyzing the dataset of:\n",
+        #       f"x = {analyzeX}\n",
+        #       f"y = {analyzeY}\n")
         print("Analysis of Regressor:")
 
     if (isLinEqSlving or isEqRegressor):
@@ -37,6 +37,10 @@ def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIt
 
     if (isRootFinding):
         print("Analysis of Root:")
+        
+        if (isOptimization):
+            print("(Optimization Mode)")
+
         print(
             f"Newton Raphson resulted in:\n{newtRaphRes}\nwith {newtRaphIter} iterations.")
         print(
@@ -44,7 +48,7 @@ def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIt
         print("\n[Evaluation completed]")
 
 
-def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
+def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimization = False):
     # print(f"{isRootFinding}, {isLinEqSlving}, {isEqRegressor}, {inputManual}")
     convertToFunc = False
     inputManual = list(manualInput)[0]
@@ -132,7 +136,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
 
                 currVect = []
                 inputX = mustNumber(
-                    "Please input your x-data: ", dataType="float", loopMsg="Input 'x' to stop (min. 2 contents).", accept=['x'])
+                    "Please input your x-data\nInput 'x' to stop (min. 2 contents).\nData: ", dataType="float", accept=['x'])
                 if inputX == 'x':
                     breaking = True
                     if (len(data) >= 2):
@@ -141,7 +145,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
                 currVect.append(inputX)
 
                 inputY = mustNumber(
-                    "Please input your y-data: ", dataType="float", loopMsg="Input 'x' to stop (min. 2 contents).", accept=['x'])
+                    "Please input your y-data\nInput 'x' to stop (min. 2 contents).\nData: ", dataType="float", accept=['x'])
                 if inputY == 'x':
                     breaking = True
                     if (len(data) >= 2):
@@ -173,6 +177,10 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
             func, gaussSdRes, gaussSdIter = GauSedProcess(inMatrix, inVector, convertFunc=(convertToFunc))
 
         fixedFunction = func
+
+        if (isOptimization): # Differentiate for optimization
+            fixedFunction = diff(fixedFunction)
+
         gaussSeidRes = copy.deepcopy(gaussSdRes)
         gaussSeidIter = gaussSdIter
 
@@ -191,4 +199,4 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
         secnMthdIter = secnMIter
 
     analysis(fixedFunction=(fixedFunction), gaussSeidIter=(gaussSeidIter), gaussSeidRes=(gaussSeidRes), newtRaphIter=(
-        newtRaphIter), newtRaphRes=(newtRaphRes), secnMthdIter=(secnMthdIter), secnMthdRes=(secnMthdRes), isRootFinding=(isRootFinding), isLinEqSlving=(isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput=(inputManual), x_data=(matrixPR), y_data=(vectorPR))
+        newtRaphIter), newtRaphRes=(newtRaphRes), secnMthdIter=(secnMthdIter), secnMthdRes=(secnMthdRes), isRootFinding=(isRootFinding), isLinEqSlving=(isLinEqSlving), isEqRegressor=(isEqRegressor), manualInput=(inputManual), x_data=(matrixPR), y_data=(vectorPR), isOptimization=(isOptimization))
