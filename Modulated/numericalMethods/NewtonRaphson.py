@@ -1,4 +1,4 @@
-from ExtraFunction import *
+from middleware.ExtraFunction import *
 
 # NewtonRaphson
 def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000, view=True):
@@ -44,13 +44,18 @@ def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000
             print("Stopped by the tolerated round currentValue")
             terminate = True
 
+        # Simulation Terminator: Found!
+        elif (evToX(f, currentValue) == 0.0):
+            print("Solution found!")
+            terminate = true
+
+        # Continue Update
+        currentVal = currentValue
+
         # Terminator
         if terminate:
             print("Newton Raphson Stopped! Last currentValue:", currentValue)
             return [currentVal, iter]
-
-        # Continue Update
-        currentVal = currentValue
     
     # Simulation Terminator: Limit of Loop
     print("Iteration Limit! The function is either divergent or requires more iteration!")

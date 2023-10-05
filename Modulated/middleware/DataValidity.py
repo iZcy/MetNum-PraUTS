@@ -1,7 +1,6 @@
-from Config import *
-from InputX import *
-from InputY import *
-
+from inputFiles.Config import *
+from inputFiles.InputX import *
+from inputFiles.InputY import *
 
 def checkValidity():
     if (len(x_vector) != len(y_vector)):

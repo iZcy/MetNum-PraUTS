@@ -1,13 +1,15 @@
 from sympy import *
 import copy
 import os
-from Processors import *
-from InputFunction import *
-from ExtraFunction import *
-from DataValidity import *
-from InputGauss import inMatrix, inVector
-from InputX import x_vector
-from InputY import y_vector
+
+from middleware.Processors import *
+from middleware.ExtraFunction import *
+from middleware.DataValidity import *
+
+from inputFiles.InputFunction import *
+from inputFiles.InputGauss import inMatrix, inVector
+from inputFiles.InputX import x_vector
+from inputFiles.InputY import y_vector
 
 def analysis(gaussSeidRes, gaussSeidIter, fixedFunction, newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter, isRootFinding, isLinEqSlving, isEqRegressor, manualInput=False, x_data=[], y_data=[]):
     # Setup Import
@@ -59,7 +61,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
     # Function Definition
     fixedFunction = funct
 
-    while (True and inputManual and isRootFinding):
+    while (True and inputManual and isRootFinding and not isLinEqSlving):
         tempFunct = input("Please input your function: ")
 
         passed = False
@@ -160,6 +162,9 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput):
             convertToFunc = True
 
     if ((isLinEqSlving) or (isEqRegressor)):
+        if (isLinEqSlving and isRootFinding):
+            convertToFunc = True
+
         if (inputManual or isEqRegressor):
             checkConfig(len(vectorPR))
             func, gaussSdRes, gaussSdIter = GauSedProcess(matrixPR, vectorPR, convertFunc=(convertToFunc))

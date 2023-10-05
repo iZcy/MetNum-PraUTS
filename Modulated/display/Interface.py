@@ -1,6 +1,6 @@
 import os
 import copy
-from Output import *
+from .Output import *
 
 # User Interface
 def u_interface_select():

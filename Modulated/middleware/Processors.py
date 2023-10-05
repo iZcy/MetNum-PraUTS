@@ -1,10 +1,13 @@
-from NewtonRaphson import *
-from SecantMethod import *
-from GaussSeidel import *
-from PowerRegressor import *
-from Config import *
-from InputX import x_vector
-from InputY import y_vector
+from numericalMethods.NewtonRaphson import *
+from numericalMethods.SecantMethod import *
+from numericalMethods.GaussSeidel import *
+from numericalMethods.PowerRegressor import *
+
+from middleware.ExtraFunction import *
+
+from inputFiles.Config import *
+from inputFiles.InputX import x_vector
+from inputFiles.InputY import y_vector
 
 # Execute Function
 

@@ -1,5 +1,5 @@
 import copy
-from ExtraFunction import *
+from middleware.ExtraFunction import *
 
 # Gauss-Seidel
 def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, view=True):
