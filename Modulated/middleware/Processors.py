@@ -26,7 +26,7 @@ def PowRegProcess(inputVectX=[], inputVectY=[], power=regressPower):
     return [matrixPR, vectorPR]
 
 
-def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inputGuess else 0), errTol=(errTolerance), limit=(iterLimit)):
+def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inputGuess else 0), errTol=(errTolerance)):
     os.system('cls')
     # Calling Methods for Linear Algebra Solving
     
@@ -38,7 +38,7 @@ def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inp
         minErr = len(vectorPR)
 
     gaussSeidRes, gaussSeidIter = GaussSeidel(roundV=(inputRound), errTol=(errTol), totalTerm=(
-        minErr), b_val=(vectorPR), guess=(guess), matrix=(matrixPR), limit=(limit), view=(viewProcess))
+        minErr), b_val=(vectorPR), guess=(guess), matrix=(matrixPR), limit=(iterLimit), view=(viewProcess))
 
     if gaussSeidIter == 0:
         return
@@ -52,14 +52,14 @@ def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inp
     return [fixedFunction, gaussSeidRes, gaussSeidIter]
 
 
-def SrRootProcess(fixedFunction, intervalMin=(intervalMin), intervalMax=(intervalMax), guessOne=(inputVal), guessTwo=(inputBefVal), errTol=(errTolerance), limit=(iterLimit)):
+def SrRootProcess(fixedFunction, intervalMin=(intervalMin), intervalMax=(intervalMax), guessOne=(inputVal), guessTwo=(inputBefVal), errTol=(errTolerance)):
     os.system('cls')
     # Calling Methods Root-Finding
     newtRaphRes, newtRaphIter = NewtonRaphson(f=(fixedFunction), f_dif=(diff(fixedFunction, x)), val=(guessOne), roundV=(
         inputRound), errRound=(errRound), tolerance=(errTol), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
     secnMthdRes, secnMthdIter = SecantMethod(valCurr=(guessOne), valBef=(guessTwo), roundV=(
-        inputRound), errRound=(errRound), tolerance=(errTol), f=(fixedFunction), limit=(limit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
+        inputRound), errRound=(errRound), tolerance=(errTol), f=(fixedFunction), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
 
     return [newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter]

@@ -14,10 +14,10 @@ inputGuess = []  # n = Regressor power: otherwise, return error
 inputRound = 50
 errRound = 50
 errTolerance = 1e-100
-iterLimit = 1000
+iterLimit = 1000000
 
 # Optimization
-intervalMin = 10
+intervalMin = float('-inf')
 intervalMax = 24
 
 # View Toggle

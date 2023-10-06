@@ -10,7 +10,7 @@ def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=
     currentVal = valCurr
     current2ndVal = valBef
 
-    for it in range(int(limit)):
+    for it in range(limit):
         iter = it + 1
 
         # Intializing Process

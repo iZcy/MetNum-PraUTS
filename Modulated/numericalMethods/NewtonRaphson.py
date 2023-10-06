@@ -6,7 +6,7 @@ def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000
     errPrev = 0
     currentVal = val
 
-    for it in range(int(limit)):
+    for it in range(limit):
         iter = it + 1
         # Intializing Process
         if (it == 0):
