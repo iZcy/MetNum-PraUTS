@@ -19,6 +19,7 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, vi
 
     errX = []
     x_valProcess = []
+    termMsg = ""
 
     # print(b_val, "\n", matrix)
 
@@ -32,7 +33,7 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, vi
         errX = copy.deepcopy(guess)
 
     # Loop the Gauss-Seidel
-    for k in range(limit):
+    for k in range(int(limit)):
         # Terminate Message
         termMsg = ""
 

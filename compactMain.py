@@ -139,7 +139,7 @@ def GaussSeidel(roundV, errTol, totalTerm, b_val, matrix, guess=0, limit=100, vi
         errX = copy.deepcopy(guess)
 
     # Loop the Gauss-Seidel
-    for k in range(limit):
+    for k in range(int(limit)):
         # Terminate Message
         termMsg = ""
 
@@ -243,7 +243,7 @@ def NewtonRaphson(f, f_dif, val, roundV, errRound, tolerance=0.00001, limit=1000
     errPrev = 0
     currentVal = val
 
-    for it in range(limit):
+    for it in range(int(limit)):
         iter = it + 1
         # Intializing Process
         if (it == 0):
@@ -380,7 +380,7 @@ def SecantMethod(f, valCurr, valBef, roundV, errRound, tolerance=0.00001, limit=
     currentVal = valCurr
     current2ndVal = valBef
 
-    for it in range(limit):
+    for it in range(int(limit)):
         iter = it + 1
 
         # Intializing Process
@@ -572,7 +572,7 @@ def PowRegProcess(inputVectX=[], inputVectY=[], power=regressPower):
     return [matrixPR, vectorPR]
 
 
-def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inputGuess else 0), errTol=(errTolerance)):
+def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inputGuess else 0), errTol=(errTolerance), limit=(iterLimit)):
     os.system('cls')
     # Calling Methods for Linear Algebra Solving
     
@@ -584,7 +584,7 @@ def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inp
         minErr = len(vectorPR)
 
     gaussSeidRes, gaussSeidIter = GaussSeidel(roundV=(inputRound), errTol=(errTol), totalTerm=(
-        minErr), b_val=(vectorPR), guess=(guess), matrix=(matrixPR), limit=(iterLimit), view=(viewProcess))
+        minErr), b_val=(vectorPR), guess=(guess), matrix=(matrixPR), limit=(limit), view=(viewProcess))
 
     if gaussSeidIter == 0:
         return
@@ -598,14 +598,14 @@ def GauSedProcess(matrixPR, vectorPR, convertFunc=True, guess=(inputGuess if inp
     return [fixedFunction, gaussSeidRes, gaussSeidIter]
 
 
-def SrRootProcess(fixedFunction, intervalMin=(intervalMin), intervalMax=(intervalMax), guessOne=(inputVal), guessTwo=(inputBefVal), errTol=(errTolerance)):
+def SrRootProcess(fixedFunction, intervalMin=(intervalMin), intervalMax=(intervalMax), guessOne=(inputVal), guessTwo=(inputBefVal), errTol=(errTolerance), limit=(iterLimit)):
     os.system('cls')
     # Calling Methods Root-Finding
     newtRaphRes, newtRaphIter = NewtonRaphson(f=(fixedFunction), f_dif=(diff(fixedFunction, x)), val=(guessOne), roundV=(
         inputRound), errRound=(errRound), tolerance=(errTol), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
     secnMthdRes, secnMthdIter = SecantMethod(valCurr=(guessOne), valBef=(guessTwo), roundV=(
-        inputRound), errRound=(errRound), tolerance=(errTol), f=(fixedFunction), limit=(iterLimit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
+        inputRound), errRound=(errRound), tolerance=(errTol), f=(fixedFunction), limit=(limit), view=(viewProcess), intervalMin=(intervalMin), intervalMax=(intervalMax))
     print()
 
     return [newtRaphRes, newtRaphIter, secnMthdRes, secnMthdIter]
@@ -672,8 +672,13 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
 
     # Setting Error Tolerance
     errTol = 0
+    iterLimit = 0
     if (inputManual):
         errTol = mustNumber("Please input error tolerance: ", dataType=("float"))
+        
+        if (isLinEqSlving or isRootFinding):
+            iterLimit = mustNumber("Please input iteration limit: ")
+    
     os.system('cls')
 
     # Calling PowerReg
@@ -808,7 +813,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
                         f"Current guess: {vectorPR}"))
                     guess.append(tempInput)
 
-            func, gaussSdRes, gaussSdIter = GauSedProcess(matrixPR, vectorPR, convertFunc=(convertToFunc), guess=(guess), errTol=(errTol))
+            func, gaussSdRes, gaussSdIter = GauSedProcess(matrixPR, vectorPR, convertFunc=(convertToFunc), guess=(guess), errTol=(errTol), limit=(iterLimit))
         else:
             checkConfig(len(inVector))
             func, gaussSdRes, gaussSdIter = GauSedProcess(inMatrix, inVector, convertFunc=(convertToFunc))
@@ -836,7 +841,7 @@ def execute(isRootFinding, isLinEqSlving, isEqRegressor, manualInput, isOptimiza
             inputMin = mustNumber("Please input minimum restriction: ", dataType="float")
             inputMax = mustNumber("Please input maximum restriction: ", dataType="float")
 
-            newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction, intervalMin=(inputMin), intervalMax=(inputMax), guessOne=(guessOne), guessTwo=(guessTwo), errTol=(errTol))
+            newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction, intervalMin=(inputMin), intervalMax=(inputMax), guessOne=(guessOne), guessTwo=(guessTwo), errTol=(errTol), limit=(iterLimit))
 
         else:
             newtRhRes, newtRIter, secnMRes, secnMIter = SrRootProcess(fixedFunction)
